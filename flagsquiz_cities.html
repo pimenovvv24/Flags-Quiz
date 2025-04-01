@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flags Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #b2ffff;
+            color: #003366;
+        }
+        h1 {
+            color: #002244;
+        }
+        #flag {
+            width: 200px;
+            height: 120px;
+            border: 3px solid #00509E;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #00509E;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #00509E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flags Quiz</h1>
+    <img id="flag" src="" alt="Guess this flag">
+    <br>
+    <input type="text" id="answer" placeholder="Enter country name">
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="giveHint()">Hint</button>
+    <button onclick="revealAnswer()">Reveal Answer</button>
+    <p id="feedback"></p>
+    <p>Score: <span id="score">0</span></p>
+
+    <script>
+        const flags = [
+            { name: "Sao Paulo", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Bandeira_da_cidade_de_S%C3%A3o_Paulo.svg/250px-Bandeira_da_cidade_de_S%C3%A3o_Paulo.svg.png" },
+            { name: "Tokyo", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Flag_of_Tokyo_Metropolis.svg/250px-Flag_of_Tokyo_Metropolis.svg.png"},
+            { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+            { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          { name: "Afghanistan", image: "https://flagcdn.com/w320/af.png" },
+          
+
+
+
+
+      
+        ];
+
+        let currentFlag = {};
+        let score = 0;
+
+        function loadFlag() {
+            currentFlag = flags[Math.floor(Math.random() * flags.length)];
+            document.getElementById("flag").src = currentFlag.image;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").innerText = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById("answer").value.trim();
+            if (userAnswer.toLowerCase() === currentFlag.name.toLowerCase()) {
+                document.getElementById("feedback").innerText = "Correct!";
+                score++;
+                document.getElementById("score").innerText = score;
+                setTimeout(loadFlag, 1000);
+            } else {
+                document.getElementById("feedback").innerText = "Wrong! Try again.";
+            }
+        }
+
+        function giveHint() {
+            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+        }
+        function revealAnswer() {
+            alert(`The correct answer is: ${currentFlag.name}`);
+            loadFlag();
+        }
+
+        window.onload = loadFlag;
+    </script>
+</body>
+</html>
