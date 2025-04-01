@@ -56,6 +56,7 @@
     <input type="text" id="answer" placeholder="Enter country name">
     <button onclick="checkAnswer()">Submit</button>
     <button onclick="giveHint()">Hint</button>
+    <button onclick="revealAnswer()">Reveal Answer</button>
     <p id="feedback"></p>
     <p>Score: <span id="score">0</span></p>
 
@@ -279,6 +280,10 @@
 
         function giveHint() {
             document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+        }
+        function revealAnswer() {
+            alert(`The correct answer is: ${currentFlag.name}`);
+            loadFlag();
         }
 
         window.onload = loadFlag;
