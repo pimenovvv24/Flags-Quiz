@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
     <title>Flags Quiz</title>
     <style>
         body {
@@ -51,6 +52,7 @@
 </head>
 <body>
     <h1>Flags Quiz</h1>
+    <h2>There are 100 flags in total to guess</h2>
     <img id="flag" src="" alt="Guess this flag">
     <br>
     <input type="text" id="answer" placeholder="Enter country name">
@@ -160,7 +162,8 @@
             { name: "Bari", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Flag_of_Bari.svg/200px-Flag_of_Bari.svg.png" },
             { name: "Florence", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_Florence.svg/250px-Flag_of_Florence.svg.png" },
             { name: "Seville", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Flag_of_Sevilla%2C_Spain.svg/240px-Flag_of_Sevilla%2C_Spain.svg.png" },
-            { name: "Valencia", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Flag_of_the_Land_of_Valencia_%28official%29.svg/250px-Flag_of_the_Land_of_Valencia_%28official%29.svg.png" }, 
+            { name: "Valencia", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Flag_of_the_Land_of_Valencia_%28official%29.svg/250px-Flag_of_the_Land_of_Valencia_%28official%29.svg.png" },
+            { name: "Thessaloniki", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Flag_of_Thessaloniki.svg/250px-Flag_of_Thessaloniki.svg.png"}
        ];
 
         let currentFlag = {};
@@ -186,7 +189,7 @@
         }
 
         function giveHint() {
-            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0,1,2] + "...";
+            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0]+currentFlag.name[1]+currentFlag.name[2] + "...";
         }
         function revealAnswer() {
             alert(`The correct answer is: ${currentFlag.name}`);
