@@ -56,6 +56,7 @@
     <input type="text" id="answer" placeholder="Enter country name">
     <button onclick="checkAnswer()">Submit</button>
     <button onclick="giveHint()">Hint</button>
+    <button onclick="revealAnswer()">Reveal Answer</button>
     <p id="feedback"></p>
     <p>Score: <span id="score">0</span></p>
 
@@ -63,46 +64,46 @@
         const flags = [
               { name: "Holy Roman Empire", image: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Banner_of_the_Holy_Roman_Emperor_with_haloes_%281400-1806%29.svg" },
               { name: "Kalmar Union", image: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Flag_of_the_Kalmar_Union.svg" },
-              { name: ["Byzantine Empire", "Byzantine"], image: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Byzantine_imperial_flag%2C_Palaeologus_dynasty.svg" },
-              { name: ["Tsardom of Russia", "Russia", "Russian Tsardom"], image: "https://upload.wikimedia.org/wikipedia/commons/8/8e/Flag_of_the_Tsardom_of_Russia_%281697%29.svg" },
+              { name: "Byzantine Empire", image: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Byzantine_imperial_flag%2C_Palaeologus_dynasty.svg" },
+              { name: "Tsardom of Russia", image: "https://upload.wikimedia.org/wikipedia/commons/8/8e/Flag_of_the_Tsardom_of_Russia_%281697%29.svg" },
               { name: "Ottoman Empire", image: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Ottoman_flag.svg" },
-              { name: ["Abbasid Caliphate", "Abbasid"], image: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Flag_of_Abbasid_Caliphate.svg" },
+              { name: "Abbasid Caliphate", image: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Flag_of_Abbasid_Caliphate.svg" },
               { name: "United Arab Republic", image: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Flag_of_United_Arab_Republic.svg" },
-              { name: ["Sultanate of Darfur", "Darfur"], image: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_the_Darfur_Sultanate.svg" },
-              { name: ["Regency of Algiers", "Algiers"], image: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Flag_of_the_Regency_of_Algiers.svg" },
-              { name: ["Asante Empire", "Asante"], image: "https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_Ashanti.svg" },
+              { name: "Sultanate of Darfur", image: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Flag_of_the_Darfur_Sultanate.svg" },
+              { name: "Regency of Algiers", image: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Flag_of_the_Regency_of_Algiers.svg" },
+              { name: "Asante Empire", image: "https://upload.wikimedia.org/wikipedia/commons/a/ae/Flag_of_Ashanti.svg" },
               { name: "Zaire", image: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Zaire.svg" },
-              { name: ["Congo Free State", "Congo", image: "https://upload.wikimedia.org/wikipedia/commons/8/8d/Flag_of_Congo_Free_State.svg" },
+              { name: "Congo Free State", image: "https://upload.wikimedia.org/wikipedia/commons/8/8d/Flag_of_Congo_Free_State.svg" },
               { name: "Rhodesia", image: "https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Rhodesia_%281968%29.svg" },
-              { name: ["Union of South Africa", "South Africa"], image: "https://upload.wikimedia.org/wikipedia/commons/a/af/Flag_of_South_Africa_1928-1994.svg" },
+              { name: "Union of South Africa", image: "https://upload.wikimedia.org/wikipedia/commons/a/af/Flag_of_South_Africa_1928-1994.svg" },
               { name: "Tibet", image: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_Tibet.svg" },
-              { name: ["Great Qing", "Qing"], image: "https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_the_Qing_Dynasty.svg" },
-              { name: ["Imperial State of Iran", "Iran"], image: "https://upload.wikimedia.org/wikipedia/commons/c/ca/State_flag_of_the_Pahlavi_dynasty.svg" },
+              { name: "Great Qing", image: "https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_the_Qing_Dynasty.svg" },
+              { name: "Imperial State of Iran", image: "https://upload.wikimedia.org/wikipedia/commons/c/ca/State_flag_of_the_Pahlavi_dynasty.svg" },
               { name: "South Vietnam", image: "https://upload.wikimedia.org/wikipedia/commons/d/d7/Flag_of_South_Vietnam.svg" },
-              { name: ["Free City of Danzig", "Danzig"], image: "https://upload.wikimedia.org/wikipedia/commons/0/08/Flag_of_the_Free_City_of_Danzig.svg" },
+              { name: "Free City of Danzig", image: "https://upload.wikimedia.org/wikipedia/commons/0/08/Flag_of_the_Free_City_of_Danzig.svg" },
               { name: "Saar", image: "https://upload.wikimedia.org/wikipedia/commons/5/52/Flag_of_Saar_%281947%E2%80%931956%29.svg" },
               { name: "German Empire", image: "https://upload.wikimedia.org/wikipedia/commons/e/ec/Flag_of_Germany_%281867%E2%80%931918%29.svg" },
-              { name: ["German Democratic Republic", "DDR", "GDR", "East Germany"], image: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_East_Germany.svg" },
+              { name: "German Democratic Republic", image: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_East_Germany.svg" },
               { name: "Prussia", image: "https://upload.wikimedia.org/wikipedia/commons/d/d6/Flag_of_Prussia_%281892%E2%80%931918%29.svg" },
-              { name: ["Kingdom of Saxony", "Saxony"], image: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Saxony_%281809-1918%29.svg" },
-              { name: ["Empire of Austria", "Austrian Empire", "Austria], image: "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_the_Habsburg_Monarchy.svg" },
-              { name: ["Kingdom of Naples", "Naples"], image: "https://upload.wikimedia.org/wikipedia/commons/c/c8/Flag_of_Kingdom_of_Naples_%281810-1815%29.svg" },
-              { name: ["Most Serene Republic of Venice", "Republic of Venice", "Venice"], image: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Republic_of_Venice.svg" },
+              { name: "Kingdom of Saxony", image: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Saxony_%281809-1918%29.svg" },
+              { name: "Empire of Austria", image: "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_the_Habsburg_Monarchy.svg" },
+              { name: "Kingdom of Naples", image: "https://upload.wikimedia.org/wikipedia/commons/c/c8/Flag_of_Kingdom_of_Naples_%281810-1815%29.svg" },
+              { name: "Republic of Venice", image: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Republic_of_Venice.svg" },
               { name: "Polish-Lithuanian Commonwealth", image: "https://upload.wikimedia.org/wikipedia/commons/1/1c/Chor%C4%85giew_Rzeczypospolitej_Obojga_Narod%C3%B3w.svg" },
               { name: "Crimean Khanate", image: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Flag_of_Crimean_Khanate.svg" },
-              { name: ["Kingdom of Livonia", "Livonia"], image: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_the_Kingdom_of_Livonia.svg" },
+              { name: "Kingdom of Livonia", image: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_the_Kingdom_of_Livonia.svg" },
               { name: "Golden Horde", image: "https://upload.wikimedia.org/wikipedia/commons/6/67/Golden_Horde_flag_1339.svg" },
               { name: "Austria-Hungary", image: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Flag_of_Austria-Hungary_1869-1918.svg" },
-              { name: ["Kingdom of Greece", "Greece"], image: "https://upload.wikimedia.org/wikipedia/commons/2/24/Flag_of_Greece_%281822-1969%29.svg" },
-              { name: ["Republic of Ragusa", "Ragusa"], image: "https://upload.wikimedia.org/wikipedia/commons/5/58/Flag_of_the_Republic_of_Ragusa.svg" },
-              { name: ["Free State of Fiume", "Fiume"], image: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Flag_of_Fiume.svg" },
-              { name: ["Kingdom of Galicia", "Galicia"], image: "https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Galicia-Lodomeria.svg" },
-              { name: ["Kingdom of Navarre", "Navarra", "Navarre"], image: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Kingdom_of_Navarre.svg" },
-              { name: ["Spanish Republic", "Spain"], image: "https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Spanish_Republic.svg" },
-              { name: ["Federal Republic of Central America", "Central America", "Central American Republic"], image: "https://upload.wikimedia.org/wikipedia/commons/8/80/Flag_of_the_Federal_Republic_of_Central_America.svg" },
-              { name: ["Empire of Brazil", "Brazil", "Brazilian Empire"], image: "https://upload.wikimedia.org/wikipedia/commons/0/02/Flag_of_Empire_of_Brazil_%281820-1870%29.svg" },
-              { name: ["Serbia and Montenegro", "Serbia Montenegro"], image: "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Serbia_and_Montenegro.svg" },
-              { name: ["USSR", "Soviet Union"], image: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_the_Soviet_Union.svg" },
+              { name: "Kingdom of Greece", image: "https://upload.wikimedia.org/wikipedia/commons/2/24/Flag_of_Greece_%281822-1969%29.svg" },
+              { name: "Republic of Ragusa", image: "https://upload.wikimedia.org/wikipedia/commons/5/58/Flag_of_the_Republic_of_Ragusa.svg" },
+              { name: "Free State of Fiume", image: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Flag_of_Fiume.svg" },
+              { name: "Kingdom of Galicia", image: "https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Galicia-Lodomeria.svg" },
+              { name: "Kingdom of Navarre", image: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Kingdom_of_Navarre.svg" },
+              { name: "Spanish Republic", image: "https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Spanish_Republic.svg" },
+              { name: "Federal Republic of Central America", image: "https://upload.wikimedia.org/wikipedia/commons/8/80/Flag_of_the_Federal_Republic_of_Central_America.svg" },
+              { name: "Empire of Brazil", image: "https://upload.wikimedia.org/wikipedia/commons/0/02/Flag_of_Empire_of_Brazil_%281820-1870%29.svg" },
+              { name: "Serbia and Montenegro", image: "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Serbia_and_Montenegro.svg" },
+              { name: "USSR", image: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_the_Soviet_Union.svg" },
               { name: "Yugoslavia", image: "https://upload.wikimedia.org/wikipedia/commons/6/60/Flag_of_Yugoslavia_%281946-1992%29.svg" }
         ];
 
@@ -130,6 +131,10 @@
 
         function giveHint() {
             document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+        }
+        function revealAnswer() {
+            alert(`The correct answer is: ${currentFlag.name}`);
+            loadFlag();
         }
 
         window.onload = loadFlag;
