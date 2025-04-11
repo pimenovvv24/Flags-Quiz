@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
+    <title>Flags Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #b2ffff;
+            color: #003366;
+        }
+        h1 {
+            color: #002244;
+        }
+        #flag {
+            width: 200px;
+            height: 120px;
+            border: 3px solid #00509E;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #00509E;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #00509E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Indonesian Provinces Flags Quiz</h1>
+    <h2>There are 38 flags to guess</h2>
+    <img id="flag" src="" alt="Guess this flag">
+    <br>
+    <input type="text" id="answer" placeholder="Enter province name">
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="giveHint()">Hint</button>
+    <button onclick="revealAnswer()">Reveal Answer</button>
+    <p id="feedback"></p>
+    <p>Score: <span id="score">0</span></p>
+
+    <script>
+        const flags = [
+            { name: "Aceh", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Flag_of_Aceh%2C_Indonesia.svg/250px-Flag_of_Aceh%2C_Indonesia.svg.png" },
+            { name: "Bali", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Official_flag_of_the_Province_of_Bali.jpg/240px-Official_flag_of_the_Province_of_Bali.jpg" },
+          { name: "Bangka Belitung", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Flag_of_Bangka-Belitung.svg/250px-Flag_of_Bangka-Belitung.svg.png" },
+          { name: "Banten", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_Banten%2C_Indonesia.svg/240px-Flag_of_Banten%2C_Indonesia.svg.png" },
+          { name: "Bengkulu", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Flag_of_Bengkulu.svg/250px-Flag_of_Bengkulu.svg.png" },
+          { name: "Gorontalo", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Flag_of_Gorontalo.svg/250px-Flag_of_Gorontalo.svg.png" },
+          { name: "Jakarta", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Flag_of_Jakarta_%28vectorised%29.svg/240px-Flag_of_Jakarta_%28vectorised%29.svg.png" },
+          { name: "Jambi", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Flag_of_Jambi.svg/240px-Flag_of_Jambi.svg.png" },
+          { name: "Central Java", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Flag_of_Province_of_Central_Java.svg/250px-Flag_of_Province_of_Central_Java.svg.png" },
+          { name: "East Java", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Flag_of_East_Java.svg/250px-Flag_of_East_Java.svg.png" },
+          { name: "West Java", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_West_Java_%28vectorised%29.svg/250px-Flag_of_West_Java_%28vectorised%29.svg.png" },
+          { name: "Central Kalimantan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Flag_of_Central_Kalimantan.svg/240px-Flag_of_Central_Kalimantan.svg.png" },
+          { name: "East Kalimantan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_East_Kalimantan.svg/250px-Flag_of_East_Kalimantan.svg.png" },
+          { name: "North Kalimantan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Flag_of_North_Kalimantan.svg/250px-Flag_of_North_Kalimantan.svg.png" },
+          { name: "South Kalimantan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Flag_of_South_Kalimantan.svg/250px-Flag_of_South_Kalimantan.svg.png" },
+          { name: "West Kalimantan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Flag_of_West_Kalimantan.svg/250px-Flag_of_West_Kalimantan.svg.png" },
+          { name: "Lampung", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_Lampung.svg/250px-Flag_of_Lampung.svg.png" },
+          { name: "Maluku", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Flag_of_Maluku.svg/240px-Flag_of_Maluku.svg.png" },
+          { name: "North Maluku", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Flag_of_North_Maluku.svg/250px-Flag_of_North_Maluku.svg.png" },
+          { name: "East Nusa Tenggara", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Flag_of_East_Nusa_Tenggara.svg/250px-Flag_of_East_Nusa_Tenggara.svg.png" },
+          { name: "West Nusa Tenggara", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Flag_of_West_Nusa_Tenggara.svg/250px-Flag_of_West_Nusa_Tenggara.svg.png" },
+          { name: "Papua", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Flag_of_Papua_2.svg/240px-Flag_of_Papua_2.svg.png" },
+          { name: "Central Papua", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Flag_of_Central_Papua_Province.svg/240px-Flag_of_Central_Papua_Province.svg.png" },
+          { name: "Highland Papua", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Flag_of_Highland_Papua.svg/250px-Flag_of_Highland_Papua.svg.png" },
+          { name: "South Papua", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Flag_of_South_Papua_Province.svg/250px-Flag_of_South_Papua_Province.svg.png" },
+          { name: "Southwest Papua", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Flag_of_Southwest_Papua.svg/240px-Flag_of_Southwest_Papua.svg.png" },
+          { name: "West Papua", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Flag_of_West_Papua_%28vectorised%29.svg/250px-Flag_of_West_Papua_%28vectorised%29.svg.png" },
+          { name: "Riau", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Flag_of_Riau.svg/240px-Flag_of_Riau.svg.png" },
+          { name: "Riau Islands", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Flag_of_Riau_Islands.svg/240px-Flag_of_Riau_Islands.svg.png" },
+          { name: "Central Sulawesi", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Flag_of_Central_Sulawesi.svg/240px-Flag_of_Central_Sulawesi.svg.png" },
+          { name: "North Sulawesi", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_North_Sulawesi.svg/250px-Flag_of_North_Sulawesi.svg.png" },
+          { name: "South Sulawesi", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Flag_of_South_Sulawesi.svg/240px-Flag_of_South_Sulawesi.svg.png" },
+          { name: "Southeast Sulawesi", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Flag_of_Southeast_Sulawesi.svg/250px-Flag_of_Southeast_Sulawesi.svg.png" },
+          { name: "West Sulawesi", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Flag_of_West_Sulawesi.svg/240px-Flag_of_West_Sulawesi.svg.png" },
+          { name: "North Sumatra", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_North_Sumatra.svg/240px-Flag_of_North_Sumatra.svg.png" },
+          { name: "South Sumatra", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Flag_of_South_Sumatra_%28vectorised%29.svg/240px-Flag_of_South_Sumatra_%28vectorised%29.svg.png" },
+          { name: "West Sumatra", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Flag_of_West_Sumatra.svg/250px-Flag_of_West_Sumatra.svg.png" },
+          { name: "Yogyakarta", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Flag_of_Yogyakarta.svg/240px-Flag_of_Yogyakarta.svg.png" },
+        ];
+
+        let currentFlag = {};
+        let score = 0;
+
+        function loadFlag() {
+            currentFlag = flags[Math.floor(Math.random() * flags.length)];
+            document.getElementById("flag").src = currentFlag.image;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").innerText = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById("answer").value.trim();
+            if (userAnswer.toLowerCase() === currentFlag.name.toLowerCase()) {
+                document.getElementById("feedback").innerText = "Correct!";
+                score++;
+                document.getElementById("score").innerText = score;
+                setTimeout(loadFlag, 1000);
+            } else {
+                document.getElementById("feedback").innerText = "Wrong! Try again.";
+            }
+        }
+
+        function giveHint() {
+            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+        }
+        function revealAnswer() {
+            alert(`The correct answer is: ${currentFlag.name}`);
+            loadFlag();
+        }
+
+        window.onload = loadFlag;
+    </script>
+</body>
+</html>
