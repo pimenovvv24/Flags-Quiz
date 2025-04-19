@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
+    <title>Flags Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #b2ffff;
+            color: #003366;
+        }
+        h1 {
+            color: #002244;
+        }
+        #flag {
+            width: 200px;
+            height: 120px;
+            border: 3px solid #00509E;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #00509E;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #00509E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canadian Flags Quiz</h1>
+    <h2>There are 13 flags to guess (provincial and territorial flags)</h2>
+    <img id="flag" src="" alt="Guess this flag">
+    <br>
+    <input type="text" id="answer" placeholder="Enter State name">
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="giveHint()">Hint</button>
+    <button onclick="revealAnswer()">Reveal Answer</button>
+    <p id="feedback"></p>
+    <p>Score: <span id="score">0</span></p>
+
+    <script>
+        const flags = [
+            { name: "Ontario", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_Ontario.svg/330px-Flag_of_Ontario.svg.png" },
+           { name: "Quebec", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Flag_of_Quebec.svg/330px-Flag_of_Quebec.svg.png" },
+           { name: "Nova Scotia", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Flag_of_Nova_Scotia.svg/330px-Flag_of_Nova_Scotia.svg.png" },
+           { name: "New Brunswick", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Flag_of_New_Brunswick.svg/330px-Flag_of_New_Brunswick.svg.png" },
+           { name: "Manitoba", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Flag_of_Manitoba.svg/330px-Flag_of_Manitoba.svg.png" },
+           { name: "British Columbia", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Flag_of_British_Columbia.svg/330px-Flag_of_British_Columbia.svg.png" },
+           { name: "Prince Edward Island", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Flag_of_Prince_Edward_Island.svg/330px-Flag_of_Prince_Edward_Island.svg.png" },
+           { name: "Saskatchewan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Flag_of_Saskatchewan.svg/330px-Flag_of_Saskatchewan.svg.png" },
+           { name: "Alberta", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Flag_of_Alberta.svg/330px-Flag_of_Alberta.svg.png" },
+           { name: "Newfoundland and Labrador", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Flag_of_Newfoundland_and_Labrador.svg/330px-Flag_of_Newfoundland_and_Labrador.svg.png" },
+           { name: "Northwest Territories", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Flag_of_the_Northwest_Territories.svg/330px-Flag_of_the_Northwest_Territories.svg.png" },
+           { name: "Yukon", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Flag_of_Yukon.svg/330px-Flag_of_Yukon.svg.png" },
+           { name: "Nunavut", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Flag_of_Nunavut.svg/330px-Flag_of_Nunavut.svg.png" },
+        
+
+           
+        ];
+
+        let currentFlag = {};
+        let score = 0;
+
+        function loadFlag() {
+            currentFlag = flags[Math.floor(Math.random() * flags.length)];
+            document.getElementById("flag").src = currentFlag.image;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").innerText = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById("answer").value.trim();
+            if (userAnswer.toLowerCase() === currentFlag.name.toLowerCase()) {
+                document.getElementById("feedback").innerText = "Correct!";
+                score++;
+                document.getElementById("score").innerText = score;
+                setTimeout(loadFlag, 1000);
+            } else {
+                document.getElementById("feedback").innerText = "Wrong! Try again.";
+            }
+        }
+
+        function giveHint() {
+            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+        }
+        function revealAnswer() {
+            alert(`The correct answer is: ${currentFlag.name}`);
+            loadFlag();
+        }
+
+        window.onload = loadFlag;
+    </script>
+</body>
+</html>
