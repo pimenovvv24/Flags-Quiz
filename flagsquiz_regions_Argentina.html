@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
+    <title>Flags Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #b2ffff;
+            color: #003366;
+        }
+        h1 {
+            color: #002244;
+        }
+        #flag {
+            width: 200px;
+            height: 120px;
+            border: 3px solid #00509E;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #00509E;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #00509E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Argentinian Provinces Flags Quiz</h1>
+    <h2>There are 24 flags to guess</h2>
+    <img id="flag" src="" alt="Guess this flag">
+    <br>
+    <input type="text" id="answer" placeholder="Enter province name">
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="giveHint()">Hint</button>
+    <button onclick="revealAnswer()">Reveal Answer</button>
+    <p id="feedback"></p>
+    <p>Score: <span id="score">0</span></p>
+
+    <script>
+        const flags = [
+            { name: "Buenos Aires City", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Bandera_de_la_Ciudad_de_Buenos_Aires.svg/330px-Bandera_de_la_Ciudad_de_Buenos_Aires.svg.png" },
+            { name: "Buenos Aires", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Bandera_de_la_Provincia_de_Buenos_Aires.svg/330px-Bandera_de_la_Provincia_de_Buenos_Aires.svg.png" },
+            { name: "Catamarca", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Bandera_de_la_Provincia_de_Catamarca.svg/330px-Bandera_de_la_Provincia_de_Catamarca.svg.png" },
+            { name: "Chaco", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Bandera_de_la_Provincia_del_Chaco.svg/330px-Bandera_de_la_Provincia_del_Chaco.svg.png" },
+            { name: "Chubut", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Bandera_de_la_Provincia_del_Chubut.svg/330px-Bandera_de_la_Provincia_del_Chubut.svg.png" },
+            { name: "Cordoba", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Bandera_de_la_Provincia_de_C%C3%B3rdoba_2014.svg/330px-Bandera_de_la_Provincia_de_C%C3%B3rdoba_2014.svg.png" },
+            { name: "Corrientes", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bandera_de_la_Provincia_de_Corrientes.svg/330px-Bandera_de_la_Provincia_de_Corrientes.svg.png" },
+            { name: "Entre Rios", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Bandera_de_la_Provincia_de_Entre_R%C3%ADos.svg/330px-Bandera_de_la_Provincia_de_Entre_R%C3%ADos.svg.png" },
+            { name: "Formosa", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Bandera_de_la_Provincia_de_Formosa.svg/300px-Bandera_de_la_Provincia_de_Formosa.svg.png" },
+            { name: "Jujuy", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Bandera_de_la_Provincia_de_Jujuy.svg/300px-Bandera_de_la_Provincia_de_Jujuy.svg.png" },
+            { name: "La Pampa", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Bandera_de_la_Provincia_de_La_Pampa.svg/300px-Bandera_de_la_Provincia_de_La_Pampa.svg.png" },
+            { name: "La Rioja", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Bandera_de_la_Provincia_de_La_Rioja.svg/330px-Bandera_de_la_Provincia_de_La_Rioja.svg.png" },
+            { name: "Mendoza", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Bandera_de_la_Provincia_de_Mendoza.svg/330px-Bandera_de_la_Provincia_de_Mendoza.svg.png" },
+            { name: "Misiones", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Bandera_de_la_Provincia_de_Misiones.svg/330px-Bandera_de_la_Provincia_de_Misiones.svg.png" },
+            { name: "Neuquen", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bandera_de_la_Provincia_del_Neuquen.svg/330px-Bandera_de_la_Provincia_del_Neuquen.svg.png" },
+            { name: "Rio Negro", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Bandera_de_la_Provincia_del_R%C3%ADo_Negro.svg/330px-Bandera_de_la_Provincia_del_R%C3%ADo_Negro.svg.png" },
+            { name: "Salta", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Bandera_de_la_Provincia_de_Salta.svg/330px-Bandera_de_la_Provincia_de_Salta.svg.png" },
+            { name: "San Juan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Flag_of_the_San_Juan_Province.svg/300px-Flag_of_the_San_Juan_Province.svg.png" },
+            { name: "San Luis", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bandera_de_la_Provincia_de_San_Luis.svg/330px-Bandera_de_la_Provincia_de_San_Luis.svg.png" },
+            { name: "Santa Cruz", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Bandera_de_la_Provincia_de_Santa_Cruz.svg/330px-Bandera_de_la_Provincia_de_Santa_Cruz.svg.png" },
+            { name: "Santa Fe", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Bandera_de_la_Provincia_de_Santa_Fe.svg/330px-Bandera_de_la_Provincia_de_Santa_Fe.svg.png" },
+            { name: "Santiago del Estero", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Bandera_de_la_Provincia_de_Santiago_del_Estero.svg/330px-Bandera_de_la_Provincia_de_Santiago_del_Estero.svg.png" },
+            { name: "Tierra del Fuego", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Bandera_de_la_Provincia_de_Tierra_del_Fuego.svg/300px-Bandera_de_la_Provincia_de_Tierra_del_Fuego.svg.png" },
+            { name: "Tucuman", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Bandera_de_la_Provincia_de_Tucum%C3%A1n.svg/330px-Bandera_de_la_Provincia_de_Tucum%C3%A1n.svg.png" },
+        
+
+
+           
+        ];
+
+        let currentFlag = {};
+        let score = 0;
+
+        function loadFlag() {
+            currentFlag = flags[Math.floor(Math.random() * flags.length)];
+            document.getElementById("flag").src = currentFlag.image;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").innerText = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById("answer").value.trim();
+            if (userAnswer.toLowerCase() === currentFlag.name.toLowerCase()) {
+                document.getElementById("feedback").innerText = "Correct!";
+                score++;
+                document.getElementById("score").innerText = score;
+                setTimeout(loadFlag, 1000);
+            } else {
+                document.getElementById("feedback").innerText = "Wrong! Try again.";
+            }
+        }
+
+        function giveHint() {
+            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+        }
+        function revealAnswer() {
+            alert(`The correct answer is: ${currentFlag.name}`);
+            loadFlag();
+        }
+
+        window.onload = loadFlag;
+    </script>
+</body>
+</html>
