@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
+    <title>Flags Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #b2ffff;
+            color: #003366;
+        }
+        h1 {
+            color: #002244;
+        }
+        #flag {
+            width: 200px;
+            height: 120px;
+            border: 3px solid #00509E;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #00509E;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #00509E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mexican States Flags Quiz</h1>
+    <h2>There are 21 flags to guess</h2>
+    <img id="flag" src="" alt="Guess this flag">
+    <br>
+    <input type="text" id="answer" placeholder="Enter State name">
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="giveHint()">Hint</button>
+    <button onclick="revealAnswer()">Reveal Answer</button>
+    <p id="feedback"></p>
+    <p>Score: <span id="score">0</span></p>
+
+    <script>
+        const flags = [
+            { name: "Guanajuato", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Flag_of_Guanajuato.svg/500px-Flag_of_Guanajuato.svg.png" },
+          { name: "Jalisco", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Flag_of_Jalisco.svg/500px-Flag_of_Jalisco.svg.png" },
+          { name: "Tlaxcala", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Flag_of_Tlaxcala.svg/500px-Flag_of_Tlaxcala.svg.png" },
+          { name: "Yucatan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Flag_of_the_Republic_of_Yucatan.svg/500px-Flag_of_the_Republic_of_Yucatan.svg.png" },
+          { name: "Aguascalientes", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Flag_of_Aguascalientes.svg/500px-Flag_of_Aguascalientes.svg.png" },
+          { name: "Baja California", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Flag_of_Baja_California.svg/500px-Flag_of_Baja_California.svg.png" },
+          { name: "Campeche", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Flag_of_Campeche.svg/500px-Flag_of_Campeche.svg.png" },
+          { name: "Chiapas", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Chiapas.svg/500px-Flag_of_Chiapas.svg.png" },
+          { name: "Hidalgo", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Flag_of_Hidalgo.svg/350px-Flag_of_Hidalgo.svg.png" },
+          { name: "Mexico", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_the_State_of_Mexico.svg/500px-Flag_of_the_State_of_Mexico.svg.png" },
+          { name: "Mexico City", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Flag_of_Mexico_City_%28variant%29.svg/500px-Flag_of_Mexico_City_%28variant%29.svg.png" },
+          { name: "Michoacan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Flag_of_Michoacan.svg/350px-Flag_of_Michoacan.svg.png" },
+          { name: "Morelos", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Flag_of_Morelos.svg/350px-Flag_of_Morelos.svg.png" },
+          { name: "Nayarit", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Flag_of_Nayarit.svg/500px-Flag_of_Nayarit.svg.png" },
+          { name: "Nuevo Leon", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Flag_of_Nuevo_Leon.svg/500px-Flag_of_Nuevo_Leon.svg.png" },
+          { name: "San Luis Potosi", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Flag_of_San_Luis_Potosi.svg/500px-Flag_of_San_Luis_Potosi.svg.png" },
+          { name: "Puebla", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Flag_of_Puebla.svg/500px-Flag_of_Puebla.svg.png" },
+          { name: "Sinaloa", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Flag_of_Sinaloa.svg/500px-Flag_of_Sinaloa.svg.png" },
+          { name: "Sonora", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Flag_of_Sonora.svg/500px-Flag_of_Sonora.svg.png" },
+          { name: "Veracruz", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Flag_of_Veracruz.svg/350px-Flag_of_Veracruz.svg.png" },
+          { name: "Zacatecas", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Flag_of_Zacatecas.svg/350px-Flag_of_Zacatecas.svg.png" },
+
+        ];
+
+        let currentFlag = {};
+        let score = 0;
+
+        function loadFlag() {
+            currentFlag = flags[Math.floor(Math.random() * flags.length)];
+            document.getElementById("flag").src = currentFlag.image;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").innerText = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById("answer").value.trim();
+            if (userAnswer.toLowerCase() === currentFlag.name.toLowerCase()) {
+                document.getElementById("feedback").innerText = "Correct!";
+                score++;
+                document.getElementById("score").innerText = score;
+                setTimeout(loadFlag, 1000);
+            } else {
+                document.getElementById("feedback").innerText = "Wrong! Try again.";
+            }
+        }
+
+        function giveHint() {
+            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+        }
+        function revealAnswer() {
+            alert(`The correct answer is: ${currentFlag.name}`);
+            loadFlag();
+        }
+
+        window.onload = loadFlag;
+    </script>
+</body>
+</html>
