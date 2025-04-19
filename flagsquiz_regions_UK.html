@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
+    <title>Flags Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #b2ffff;
+            color: #003366;
+        }
+        h1 {
+            color: #002244;
+        }
+        #flag {
+            width: 200px;
+            height: 120px;
+            border: 3px solid #00509E;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #00509E;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #00509E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>UK Flags Quiz</h1>
+    <h2>There are 84 flags to guess</h2>
+  <h2>They include flags of UK Countries, dependencies, overseas territories, English, Scottish, Welsh counties</h2>
+    <img id="flag" src="" alt="Guess this flag">
+    <br>
+    <input type="text" id="answer" placeholder="Enter State name">
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="giveHint()">Hint</button>
+    <button onclick="revealAnswer()">Reveal Answer</button>
+    <p id="feedback"></p>
+    <p>Score: <span id="score">0</span></p>
+
+    <script>
+        const flags = [
+            { name: "England", image: "https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Flag_of_England.svg/330px-Flag_of_England.svg.png" },
+          { name: "Northern Ireland", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Flag_of_Northern_Ireland_%281953%E2%80%931972%29.svg/330px-Flag_of_Northern_Ireland_%281953%E2%80%931972%29.svg.png" },
+          { name: "Scotland", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Flag_of_Scotland.svg/330px-Flag_of_Scotland.svg.png" },
+          { name: "Wales", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Flag_of_Wales.svg/300px-Flag_of_Wales.svg.png" },
+          { name: "Alderney", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Alderney.svg/330px-Flag_of_Alderney.svg.png" },
+          { name: "Guernsey", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_Guernsey.svg/330px-Flag_of_Guernsey.svg.png" },
+          { name: "Herm", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Flag_of_Herm.svg/330px-Flag_of_Herm.svg.png" },
+          { name: "Isle of Man", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Flag_of_the_Isle_of_Mann.svg/330px-Flag_of_the_Isle_of_Mann.svg.png" },
+          { name: "Jersey", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Flag_of_Jersey.svg/300px-Flag_of_Jersey.svg.png" },
+          { name: "Sark", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Flag_of_Sark_%28bordered%29.svg/300px-Flag_of_Sark_%28bordered%29.svg.png" },
+          { name: "Anguilla", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Flag_of_Anguilla.svg/330px-Flag_of_Anguilla.svg.png" },
+          { name: "Ascencion Island", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Ascension_Island.svg/300px-Flag_of_Ascension_Island.svg.png" },
+          { name: "Bermuda", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Flag_of_Bermuda.svg/330px-Flag_of_Bermuda.svg.png" },
+          { name: "British Antarctic Territory", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Flag_of_the_British_Antarctic_Territory.svg/330px-Flag_of_the_British_Antarctic_Territory.svg.png" },
+          { name: "British Indian Ocean Territory", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_the_Commissioner_of_the_British_Indian_Ocean_Territory.svg/330px-Flag_of_the_Commissioner_of_the_British_Indian_Ocean_Territory.svg.png" },
+          { name: "British Virgin Islands", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Flag_of_the_British_Virgin_Islands.svg/330px-Flag_of_the_British_Virgin_Islands.svg.png" },
+          { name: "Cayman Islands", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Flag_of_the_Cayman_Islands.svg/330px-Flag_of_the_Cayman_Islands.svg.png" },
+          { name: "Falkland Islands", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_Falkland_Islands.svg/330px-Flag_of_the_Falkland_Islands.svg.png" },
+          { name: "Gibraltar", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Flag_of_Gibraltar.svg/330px-Flag_of_Gibraltar.svg.png" },
+          { name: "Montserrat", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Flag_of_Montserrat.svg/330px-Flag_of_Montserrat.svg.png" },
+          { name: "Pitcairn Islands", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_the_Pitcairn_Islands.svg/330px-Flag_of_the_Pitcairn_Islands.svg.png" },
+          { name: "Saint Helena", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Flag_of_Saint_Helena.svg/330px-Flag_of_Saint_Helena.svg.png" },
+          { name: "South Georgia and the South Sandwich Islands", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Flag_of_South_Georgia_and_the_South_Sandwich_Islands.svg/330px-Flag_of_South_Georgia_and_the_South_Sandwich_Islands.svg.png" },
+          { name: "Tristan da Cunha", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Flag_of_Tristan_da_Cunha.svg/330px-Flag_of_Tristan_da_Cunha.svg.png" },
+          { name: "Turks and Caicos Islands", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Flag_of_the_Turks_and_Caicos_Islands.svg/330px-Flag_of_the_Turks_and_Caicos_Islands.svg.png" },
+          { name: "East Anglia", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Flag_of_East_Anglia.svg/250px-Flag_of_East_Anglia.svg.png" },
+          { name: "Essex", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Flag_of_Essex.svg/250px-Flag_of_Essex.svg.png" },
+          { name: "Kent", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Flag_of_Kent.svg/250px-Flag_of_Kent.svg.png" },
+          { name: "Bedfordshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Bedfordshire_County_Flag.svg/250px-Bedfordshire_County_Flag.svg.png" },
+          { name: "Buckinghamshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Flag_of_Buckinghamshire.svg/200px-Flag_of_Buckinghamshire.svg.png" },
+          { name: "Berkshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Flag_of_Berkshire.svg/250px-Flag_of_Berkshire.svg.png" },
+          { name: "Cambridgeshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Cambridgeshire_Flag.svg/250px-Cambridgeshire_Flag.svg.png" },
+          { name: "Cheshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Flag_of_Cheshire.svg/250px-Flag_of_Cheshire.svg.png" },
+          { name: "Cornwall", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Flag_of_Cornwall.svg/250px-Flag_of_Cornwall.svg.png" },
+          { name: "Cumberland", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Flag_of_Cumberland%2C_United_Kingdom.svg/250px-Flag_of_Cumberland%2C_United_Kingdom.svg.png" },
+          { name: "Derbyshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Derbyshire_flag.svg/250px-Derbyshire_flag.svg.png" },
+          { name: "Devon", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Flag_of_Devon.svg/250px-Flag_of_Devon.svg.png" },
+          { name: "Dorset", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Saint_Wite%27s_Cross.svg/250px-Saint_Wite%27s_Cross.svg.png" },
+          { name: "Durham", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Flag_of_County_Durham.svg/250px-Flag_of_County_Durham.svg.png" },
+          { name: "Gloucestershire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Severn_Cross.svg/250px-Severn_Cross.svg.png" },
+          { name: "Hampshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/County_Flag_of_Hampshire.svg/250px-County_Flag_of_Hampshire.svg.png" },
+          { name: "Herefordshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/County_Flag_Of_Herefordshire.svg/250px-County_Flag_Of_Herefordshire.svg.png" },
+          { name: "Hertfordshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/County_Flag_of_Hertfordshire_%28version%29.svg/250px-County_Flag_of_Hertfordshire_%28version%29.svg.png" },
+          { name: "Huntingdonshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Flag_of_Huntingdonshire.svg/250px-Flag_of_Huntingdonshire.svg.png" },
+          { name: "Lancashire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Lancashire_County_Flag.svg/250px-Lancashire_County_Flag.svg.png" },
+          { name: "Leicestershire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Flag_of_Leicestershire.svg/250px-Flag_of_Leicestershire.svg.png" },
+          { name: "Lincolnshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Lincolnshire_flag.svg/250px-Lincolnshire_flag.svg.png" },
+          { name: "Middlesex", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Flag_of_Middlesex.svg/250px-Flag_of_Middlesex.svg.png" },
+          { name: "Norfolk", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Flag_of_Norfolk.svg/250px-Flag_of_Norfolk.svg.png" },
+          { name: "Northamptonshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Flag_of_Northamptonshire.svg/250px-Flag_of_Northamptonshire.svg.png" },
+          { name: "Northumberland", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Flag_of_Northumberland.svg/250px-Flag_of_Northumberland.svg.png" },
+          { name: "Nottinghamshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/County_Flag_of_Nottinghamshire.svg/250px-County_Flag_of_Nottinghamshire.svg.png" },
+          { name: "Oxfordshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Flag_of_Oxfordshire.svg/250px-Flag_of_Oxfordshire.svg.png" },
+          { name: "Rutland", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Rutland_County_Flag.svg/250px-Rutland_County_Flag.svg.png" },
+          { name: "Shropshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Flag_of_Shropshire.svg/200px-Flag_of_Shropshire.svg.png" },
+          { name: "Somerset", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Somerset_Flag.svg/250px-Somerset_Flag.svg.png" },
+          { name: "Staffordshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Staffordshire_Flag.svg/250px-Staffordshire_Flag.svg.png" },
+          { name: "Suffolk", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/County_Flag_of_Suffolk.svg/250px-County_Flag_of_Suffolk.svg.png" },
+          { name: "Surrey", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Surrey.svg/250px-Surrey.svg.png" },
+          { name: "Sussex", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Flag_of_Sussex.svg/250px-Flag_of_Sussex.svg.png" },
+          { name: "Warwickshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Flag_of_Warwickshire.svg/250px-Flag_of_Warwickshire.svg.png" },
+          { name: "Westmorland", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Flag_of_Westmorland.svg/250px-Flag_of_Westmorland.svg.png" },
+          { name: "Wiltshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/County_Flag_of_Wiltshire.svg/250px-County_Flag_of_Wiltshire.svg.png" },
+          { name: "Worcestershire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Worcestershire_flag.svg/250px-Worcestershire_flag.svg.png" },
+          { name: "Yorkshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Flag_of_Yorkshire.svg/250px-Flag_of_Yorkshire.svg.png" },
+          { name: "Aberdeenshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Flag_of_Aberdeenshire.svg/250px-Flag_of_Aberdeenshire.svg.png" },
+          { name: "Banffshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Flag_of_Banffshire.svg/250px-Flag_of_Banffshire.svg.png" },
+          { name: "Berwickshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Flag_of_Berwickshire.svg/250px-Flag_of_Berwickshire.svg.png" },
+          { name: "Caithness", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Caithness_Flag.svg/250px-Caithness_Flag.svg.png" },
+          { name: "East Lothian", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Flag_of_East_Lothian.svg/250px-Flag_of_East_Lothian.svg.png" },
+          { name: "Kirkcudbrightshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Flag_of_Kirkcudbrightshire.svg/250px-Flag_of_Kirkcudbrightshire.svg.png" },
+          { name: "Morayshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_Morayshire.svg/250px-Flag_of_Morayshire.svg.png" },
+          { name: "Orkney", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/2007_Flag_of_Orkney.svg/250px-2007_Flag_of_Orkney.svg.png" },
+          { name: "Shetland", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Flag_of_Shetland.svg/250px-Flag_of_Shetland.svg.png" },
+           { name: "Sutherland", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Flag_of_Sutherland.svg/250px-Flag_of_Sutherland.svg.png" },
+          { name: "Anglesey", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Anglesey.svg/250px-Flag_of_Anglesey.svg.png" },
+          { name: "Brecknockshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Flag_of_Brecknockshire.svg/200px-Flag_of_Brecknockshire.svg.png" },
+          { name: "Caernarfonshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Flag_of_Caernarfonshire.svg/250px-Flag_of_Caernarfonshire.svg.png" },
+           { name: "Cardiganshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Flag_of_Cardiganshire_%28proposal%29.svg/250px-Flag_of_Cardiganshire_%28proposal%29.svg.png" },
+          { name: "Flintshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Flag_of_Flintshire.svg/250px-Flag_of_Flintshire.svg.png" },
+          { name: "Glamorgan", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Glamorgan_Flag.svg/250px-Glamorgan_Flag.svg.png" },
+          { name: "Merionetshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Flag_of_Merionethshire.svg/250px-Flag_of_Merionethshire.svg.png" },
+           { name: "Monmouthshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Flag_of_Merionethshire.svg/250px-Flag_of_Merionethshire.svg.png" },
+          { name: "Pembrokeshire", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Flag_of_Pembrokeshire.svg/250px-Flag_of_Pembrokeshire.svg.png" },
+          { name: "Isles of Scilly", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/ScillonianCross.svg/250px-ScillonianCross.svg.png" },  
+        ];
+
+        let currentFlag = {};
+        let score = 0;
+
+        function loadFlag() {
+            currentFlag = flags[Math.floor(Math.random() * flags.length)];
+            document.getElementById("flag").src = currentFlag.image;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").innerText = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById("answer").value.trim();
+            if (userAnswer.toLowerCase() === currentFlag.name.toLowerCase()) {
+                document.getElementById("feedback").innerText = "Correct!";
+                score++;
+                document.getElementById("score").innerText = score;
+                setTimeout(loadFlag, 1000);
+            } else {
+                document.getElementById("feedback").innerText = "Wrong! Try again.";
+            }
+        }
+
+        function giveHint() {
+            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+        }
+        function revealAnswer() {
+            alert(`The correct answer is: ${currentFlag.name}`);
+            loadFlag();
+        }
+
+        window.onload = loadFlag;
+    </script>
+</body>
+</html>
