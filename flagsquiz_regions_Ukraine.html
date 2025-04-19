@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
+    <title>Flags Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #b2ffff;
+            color: #003366;
+        }
+        h1 {
+            color: #002244;
+        }
+        #flag {
+            width: 200px;
+            height: 120px;
+            border: 3px solid #00509E;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #00509E;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            background-color: #00509E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ukrainian Regions Flags Quiz</h1>
+    <h2>There are 27 flags to guess (Oblasts, autonomous republic, cities with special status, as internationally recognised)</h2>
+    <img id="flag" src="" alt="Guess this flag">
+    <br>
+    <input type="text" id="answer" placeholder="Enter flag name">
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="giveHint()">Hint</button>
+    <button onclick="revealAnswer()">Reveal Answer</button>
+    <p id="feedback"></p>
+    <p>Score: <span id="score">0</span></p>
+
+    <script>
+        const flags = [
+            { name: "Cherkasy Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Flag_of_Cherkasy_Oblast.svg/330px-Flag_of_Cherkasy_Oblast.svg.png" },
+          { name: "Chernivtsi Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Flag_of_Chernivtsi_Oblast.svg/300px-Flag_of_Chernivtsi_Oblast.svg.png" },
+          { name: "Chernihiv Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Flag_of_Chernihiv_Oblast.svg/300px-Flag_of_Chernihiv_Oblast.svg.png" },
+          { name: "Dnipropetrovsk Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Flag_of_Dnipropetrovsk_Oblast.svg/300px-Flag_of_Dnipropetrovsk_Oblast.svg.png" },
+          { name: "Donetsk Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Flag_of_Donetsk_Oblast.svg/330px-Flag_of_Donetsk_Oblast.svg.png" },
+          { name: "Ivano-Frankivsk Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Flag_of_Ivano-Frankivsk_Oblast.svg/300px-Flag_of_Ivano-Frankivsk_Oblast.svg.png" },
+          { name: "Kharkiv Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_Kharkiv_Oblast.svg/300px-Flag_of_Kharkiv_Oblast.svg.png" },
+          { name: "Kherson Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_Kherson_Oblast.svg/300px-Flag_of_Kherson_Oblast.svg.png" },
+          { name: "Khmelnytskyi Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Flag_of_Khmelnytskyi_Oblast.svg/330px-Flag_of_Khmelnytskyi_Oblast.svg.png" },
+          { name: "Kirovohrad Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_Kirovohrad_Oblast.svg/330px-Flag_of_Kirovohrad_Oblast.svg.png" },
+          { name: "Kyiv Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Flag_of_Kyiv_Oblast.svg/330px-Flag_of_Kyiv_Oblast.svg.png" },
+          { name: "Luhansk Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Flag_of_Luhansk_Oblast.svg/300px-Flag_of_Luhansk_Oblast.svg.png" },
+          { name: "Lviv Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Flag_of_Lviv_Oblast.svg/300px-Flag_of_Lviv_Oblast.svg.png" },
+          { name: "Mykolaiv Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Flag_of_Mykolaiv_Oblast.svg/330px-Flag_of_Mykolaiv_Oblast.svg.png" },
+          { name: "Odesa Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Odesa_Oblast.svg/330px-Flag_of_Odesa_Oblast.svg.png" },
+          { name: "Poltava Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Flag_of_Poltava_Oblast.svg/330px-Flag_of_Poltava_Oblast.svg.png" },
+          { name: "Rivne Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Flag_of_Rivne_Oblast.svg/300px-Flag_of_Rivne_Oblast.svg.png" },
+          { name: "Sumy Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Sumy_Oblast.svg/330px-Flag_of_Sumy_Oblast.svg.png" },
+          { name: "Ternopil Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Flag_of_Ternopil_Oblast.svg/330px-Flag_of_Ternopil_Oblast.svg.png" },
+          { name: "Vinnytsia Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Vinnytsia_Oblast.svg/330px-Flag_of_Vinnytsia_Oblast.svg.png" },
+          { name: "Volyn Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Flag_of_Volhynian_Oblast.svg/330px-Flag_of_Volhynian_Oblast.svg.png" },
+          { name: "Zaporizhia Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Flag_of_Zaporizhia_Oblast.svg/330px-Flag_of_Zaporizhia_Oblast.svg.png" },
+          { name: "Zakarpattia Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Flag_of_Transcarpathian_Oblast.svg/330px-Flag_of_Transcarpathian_Oblast.svg.png" },
+          { name: "Zhytomir Oblast", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Flag_of_Zhytomyr_Oblast.svg/300px-Flag_of_Zhytomyr_Oblast.svg.png" },
+          { name: "Crimea", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Flag_of_Crimea.svg/330px-Flag_of_Crimea.svg.png" },
+          { name: "Kyiv", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Flag_of_Kiev.svg/330px-Flag_of_Kiev.svg.png" },
+          { name: "Sevastopol", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Flag_of_Sevastopol.svg/300px-Flag_of_Sevastopol.svg.png" },
+
+        ];
+
+        let currentFlag = {};
+        let score = 0;
+
+        function loadFlag() {
+            currentFlag = flags[Math.floor(Math.random() * flags.length)];
+            document.getElementById("flag").src = currentFlag.image;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").innerText = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById("answer").value.trim();
+            if (userAnswer.toLowerCase() === currentFlag.name.toLowerCase()) {
+                document.getElementById("feedback").innerText = "Correct! Молодець!";
+                score++;
+                document.getElementById("score").innerText = score;
+                setTimeout(loadFlag, 1000);
+            } else {
+                document.getElementById("feedback").innerText = "Wrong! Try again.";
+            }
+        }
+
+        function giveHint() {
+            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+        }
+        function revealAnswer() {
+            alert(`The correct answer is: ${currentFlag.name}`);
+            loadFlag();
+        }
+
+        window.onload = loadFlag;
+    </script>
+</body>
+</html>
