@@ -122,7 +122,8 @@
         let countdown;
         let modeLocked = false;
 
-        document.getElementById("high-score").innerText = localStorage.getItem("highScore") || 0;
+    const pageKey = document.title.replace(/\s+/g, '-') + '-highScore';
+    document.getElementById("high-score").innerText = localStorage.getItem(pageKey) || 0;
 
     
 
@@ -199,9 +200,9 @@
 
         function endGame() {
             alert(`Game Over! Your final score is: ${score}`);
-            const highScore = parseInt(localStorage.getItem("highScore") || "0");
+            const highScore = parseInt(localStorage.getItem(pageKey) || "0");
             if (score > highScore) {
-                localStorage.setItem("highScore", score);
+                localStorage.setItem(pageKey, score);
                 alert("New High Score!");
             }
             location.reload();
