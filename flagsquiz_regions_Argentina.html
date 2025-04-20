@@ -1,19 +1,29 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
-    <title>Flags Quiz</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Australian Flags Quiz</title>
+    <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
-            background-color: #b2ffff;
             color: #003366;
+            background-color: #b2ffff
         }
-        h1 {
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .logo img {
+            height: 50px;
+            border-radius: 5px;
+        }
+        h1, h2 {
             color: #002244;
         }
         #flag {
@@ -24,7 +34,7 @@
             border-radius: 10px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
         }
-        input {
+        input, select {
             padding: 10px;
             font-size: 16px;
             border: 2px solid #00509E;
@@ -48,23 +58,51 @@
         p {
             font-size: 18px;
         }
+        #mode-selection {
+            margin-bottom: 20px;
+        }
+        #timer-container {
+            margin: 10px;
+        }
     </style>
 </head>
 <body>
+    <a class="logo" href="index.html">
+        <img src="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0" alt="Logo">
+    </a>
     <h1>Argentinian Provinces Flags Quiz</h1>
     <h2>There are 24 flags to guess</h2>
+
+    <div id="mode-selection">
+        <label><strong>Select Mode:</strong></label>
+        <select id="mode">
+            <option value="arcade">Arcade Mode (Endless)</option>
+            <option value="all">All Flags Mode (No repeats)</option>
+        </select>
+    </div>
+
+    <div id="timer-container">
+        <label>Set Timer (seconds):</label>
+        <input type="number" id="timer-input" min="10" value="60">
+        <button onclick="startTimer()">Start Timer</button>
+        <span id="timer-display"></span>
+    </div>
+
     <img id="flag" src="" alt="Guess this flag">
     <br>
-    <input type="text" id="answer" placeholder="Enter province name">
+    <input type="text" id="answer" placeholder="Enter State/Territory Name">
+    <br>
     <button onclick="checkAnswer()">Submit</button>
     <button onclick="giveHint()">Hint</button>
     <button onclick="revealAnswer()">Reveal Answer</button>
+
     <p id="feedback"></p>
     <p>Score: <span id="score">0</span></p>
+    <p>High Score: <span id="high-score">0</span></p>
 
     <script>
         const flags = [
-            { name: "Buenos Aires City", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Bandera_de_la_Ciudad_de_Buenos_Aires.svg/330px-Bandera_de_la_Ciudad_de_Buenos_Aires.svg.png" },
+           { name: "Buenos Aires City", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Bandera_de_la_Ciudad_de_Buenos_Aires.svg/330px-Bandera_de_la_Ciudad_de_Buenos_Aires.svg.png" },
             { name: "Buenos Aires", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Bandera_de_la_Provincia_de_Buenos_Aires.svg/330px-Bandera_de_la_Provincia_de_Buenos_Aires.svg.png" },
             { name: "Catamarca", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Bandera_de_la_Provincia_de_Catamarca.svg/330px-Bandera_de_la_Provincia_de_Catamarca.svg.png" },
             { name: "Chaco", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Bandera_de_la_Provincia_del_Chaco.svg/330px-Bandera_de_la_Provincia_del_Chaco.svg.png" },
@@ -87,29 +125,54 @@
             { name: "Santa Fe", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Bandera_de_la_Provincia_de_Santa_Fe.svg/330px-Bandera_de_la_Provincia_de_Santa_Fe.svg.png" },
             { name: "Santiago del Estero", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Bandera_de_la_Provincia_de_Santiago_del_Estero.svg/330px-Bandera_de_la_Provincia_de_Santiago_del_Estero.svg.png" },
             { name: "Tierra del Fuego", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Bandera_de_la_Provincia_de_Tierra_del_Fuego.svg/300px-Bandera_de_la_Provincia_de_Tierra_del_Fuego.svg.png" },
-            { name: "Tucuman", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Bandera_de_la_Provincia_de_Tucum%C3%A1n.svg/330px-Bandera_de_la_Provincia_de_Tucum%C3%A1n.svg.png" },
-        
+            { name: "Tucuman", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Bandera_de_la_Provincia_de_Tucum%C3%A1n.svg/330px-Bandera_de_la_Provincia_de_Tucum%C3%A1n.svg.png" }
+              ];
 
 
-           
-        ];
-
-        let currentFlag = {};
+        let currentFlag;
+        let usedFlags = [];
         let score = 0;
+        let timer;
+        let countdown;
+        let modeLocked = false;
+
+        document.getElementById("high-score").innerText = localStorage.getItem("highScore") || 0;
+
+    
 
         function loadFlag() {
-            currentFlag = flags[Math.floor(Math.random() * flags.length)];
+            const mode = document.getElementById("mode").value;
+            let availableFlags = mode === "all"
+                ? flags.filter(flag => !usedFlags.includes(flag.name))
+                : flags;
+
+            if (mode === "all" && availableFlags.length === 0) {
+                endGame();
+                return;
+            }
+
+            currentFlag = availableFlags[Math.floor(Math.random() * availableFlags.length)];
             document.getElementById("flag").src = currentFlag.image;
             document.getElementById("answer").value = "";
             document.getElementById("feedback").innerText = "";
         }
 
         function checkAnswer() {
-            let userAnswer = document.getElementById("answer").value.trim();
-            if (userAnswer.toLowerCase() === currentFlag.name.toLowerCase()) {
+            const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
+            if (userAnswer === currentFlag.name.toLowerCase()) {
                 document.getElementById("feedback").innerText = "Correct!";
                 score++;
                 document.getElementById("score").innerText = score;
+
+                if (!modeLocked) {
+                    document.getElementById("mode-selection").style.display = "none";
+                    modeLocked = true;
+                }
+
+                if (document.getElementById("mode").value === "all") {
+                    usedFlags.push(currentFlag.name);
+                }
+
                 setTimeout(loadFlag, 1000);
             } else {
                 document.getElementById("feedback").innerText = "Wrong! Try again.";
@@ -117,11 +180,45 @@
         }
 
         function giveHint() {
-            document.getElementById("feedback").innerText = "Hint: " + currentFlag.name[0] + "...";
+            document.getElementById("feedback").innerText = `Hint: ${currentFlag.name[0]}...`;
         }
+
         function revealAnswer() {
             alert(`The correct answer is: ${currentFlag.name}`);
+            if (!modeLocked) {
+                document.getElementById("mode-selection").style.display = "none";
+                modeLocked = true;
+            }
+            if (document.getElementById("mode").value === "all") {
+                usedFlags.push(currentFlag.name);
+            }
             loadFlag();
+        }
+
+        function startTimer() {
+            clearInterval(countdown);
+            const time = parseInt(document.getElementById("timer-input").value);
+            let timeLeft = time;
+            document.getElementById("timer-display").innerText = `Time left: ${timeLeft}s`;
+
+            countdown = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer-display").innerText = `Time left: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            alert(`Game Over! Your final score is: ${score}`);
+            const highScore = parseInt(localStorage.getItem("highScore") || "0");
+            if (score > highScore) {
+                localStorage.setItem("highScore", score);
+                alert("New High Score!");
+            }
+            location.reload();
         }
 
         window.onload = loadFlag;
