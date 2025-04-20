@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
     <title>Flags Quiz</title>
+    <link rel="icon" href="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,13 +12,29 @@
             padding: 20px;
             background-color: #b2ffff;
             color: #003366;
+            margin: 0;
         }
+
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .logo img {
+            height: 50px;
+            border-radius: 10px;
+        }
+
         h1 {
             color: #002244;
+            margin-top: 70px;
         }
+
         .menu {
             margin-top: 50px;
         }
+
         .menu button {
             padding: 15px 30px;
             font-size: 18px;
@@ -30,24 +46,95 @@
             cursor: pointer;
             transition: background 0.3s;
         }
+
         .menu button:hover {
             background-color: #003366;
+        }
+
+        form {
+            margin-top: 60px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+            background: #e0ffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        form h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #00509E;
+        }
+
+        button[type="submit"] {
+            background-color: #00509E;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #003366;
+        }
+
+        .credits {
+            margin-top: 50px;
+            font-size: 14px;
+            color: #002244;
         }
     </style>
 </head>
 <body>
+
+    <!-- Logo -->
+    <a class="logo" href="index.html">
+        <img src="https://ugc.production.linktr.ee/9DFRxFEQjyNtKyi0Gy7w_tkN02Q980G27mEWY?io=true&size=avatar-v3_0" alt="Logo">
+    </a>
+
+    <!-- Title -->
     <h1>Flags Quiz</h1>
-	<h2>Practice your knowledge of flags from all around the world in this simple yet challenging game! </h2>
-    
+    <h2>Practice your knowledge of flags from all around the world in this simple yet challenging game!</h2>
+
+    <!-- Menu -->
     <div class="menu">
         <a href="flagsquiz_countries.html"><button>Country Flags Quiz (UN Recognised)</button></a>
-	<a href="flagsquiz_countriesdependencies.html"><button>All Countries & Dependencies Flags Quiz</button></a>
+        <a href="flagsquiz_countriesdependencies.html"><button>All Countries & Dependencies Flags Quiz</button></a>
         <a href="flagsquiz_regions.html"><button>Region Flags Quiz</button></a>
-	<a href="flagsquiz_cities.html"><button>Cities Flags Quiz</button></a>
-	<a href="flagsquiz_history.html"><button>Historical Flags Quiz</button></a>
-	<a href="flagsquiz_fiction.html"><button>Fictional Flags Quiz</button></a>
+        <a href="flagsquiz_cities.html"><button>Cities Flags Quiz</button></a>
+        <a href="flagsquiz_history.html"><button>Historical Flags Quiz</button></a>
+        <a href="flagsquiz_fiction.html"><button>Fictional Flags Quiz</button></a>
         <a href="combined.html"><button>Combined Mode with all flags</button></a>
     </div>
-	<h3>Created and developed by Valerii Pimenov, Instagram: @pimenov_v24 and @_maps_world </h3>
+
+    <!-- Contact Form -->
+    <form action="https://formsubmit.co/pimenovvaleriy24@gmail.com" method="POST">
+        <h3>Send a Flag Quiz Request</h3>
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" placeholder="Your Request" rows="5" required></textarea>
+        <button type="submit">Send</button>
+    </form>
+
+    <!-- Credits -->
+    <div class="credits">
+        <p>Created and developed by Valerii Pimenov</p>
+        <p>Instagram: @pimenov_v24 and @_maps_world</p>
+    </div>
+
 </body>
 </html>
